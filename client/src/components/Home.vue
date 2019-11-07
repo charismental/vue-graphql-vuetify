@@ -1,5 +1,7 @@
 <template>
-  <div>
-    <h1>Home</h1>
-  </div>
+  <v-container>
+    <v-layout>
+      <h1>Home Component</h1>
+    </v-layout>
+  </v-container>
 </template>
