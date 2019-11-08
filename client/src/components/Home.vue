@@ -48,7 +48,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 #carousel__title {
   position: absolute;
   background-color: rgba(0, 0, 0, 0.5);
@@ -59,5 +59,8 @@ export default {
   bottom: 50px;
   left: 0;
   right: 0;
+}
+.v-carousel__controls {
+  background:rgba(0, 0, 0, 0.5) !important;
 }
 </style>
