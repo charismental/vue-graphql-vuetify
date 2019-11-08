@@ -7,7 +7,6 @@ import Profile from '../components/Auth/Profile.vue'
 import Signin from '../components/Auth/Signin.vue'
 import Signup from '../components/Auth/Signup.vue'
 
-
 Vue.use(VueRouter)
 
 const routes = [
