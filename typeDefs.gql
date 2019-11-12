@@ -45,4 +45,5 @@ type Mutation {
 
 type Query {
   getPosts: [Post]
+  getCurrentUser: User
 }
