@@ -4,12 +4,12 @@ import Vuex from 'vuex'
 import router from '../router'
 
 import { defaultClient as apolloClient } from '../main'
-import { 
-  GET_POSTS, 
-  SIGNIN_USER, 
-  SIGNUP_USER, 
-  GET_CURRENT_USER, 
-  ADD_POST 
+import {
+  GET_POSTS,
+  SIGNIN_USER,
+  SIGNUP_USER,
+  GET_CURRENT_USER,
+  ADD_POST
 } from '../queries'
 
 Vue.use(Vuex)
