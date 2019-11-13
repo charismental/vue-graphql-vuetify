@@ -1,15 +1,5 @@
 import { gql } from 'apollo-boost'
 
-// Post Queries
-export const GET_POSTS = gql`
-  query {
-    getPosts {
-      _id
-      title
-      imageUrl
-    }
-  }
-`
 // User Queries
 export const GET_CURRENT_USER = gql`
   query {
@@ -29,6 +19,39 @@ export const GET_CURRENT_USER = gql`
   }
 `
 // Posts Queries
+export const GET_POSTS = gql`
+  query {
+    getPosts {
+      _id
+      title
+      imageUrl
+    }
+  }
+`
+export const GET_POST = gql`
+  query($postId: ID!) {
+    getPost(postId: $postId) {
+      _id
+      title
+      imageUrl
+      categories
+      description
+      likes
+      createdDate
+      messages {
+        _id
+        messageBody
+        messageDate
+        messageUser {
+          _id
+          username
+          avatar
+        }
+      }
+    }
+  }
+`
+
 export const INFINITE_SCROLL_POSTS = gql`
   query($pageNum: Int!, $pageSize: Int!) {
     infiniteScrollPosts(pageNum: $pageNum, pageSize: $pageSize) {

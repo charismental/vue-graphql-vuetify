@@ -23,8 +23,8 @@ type Post {
 type Message {
   _id: ID
   messageBody: String!
-  MessageDate: String
-  MessageUser: User!
+  messageDate: String
+  messageUser: User!
 }
 
 type Token {
@@ -51,5 +51,6 @@ type Mutation {
 type Query {
   getPosts: [Post]
   getCurrentUser: User
+  getPost(postId: ID!): Post!
   infiniteScrollPosts(pageNum: Int!, pageSize: Int!): PostsPage
 }
