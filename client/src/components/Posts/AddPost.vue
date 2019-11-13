@@ -54,7 +54,9 @@
                 :items="[
                   'Art',
                   'Education',
+                  'Food',
                   'Travel',
+                  'Furniture',
                   'Photography',
                   'Technology'
                 ]"
@@ -130,11 +132,20 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['loading'])
+    ...mapGetters(['loading', 'user'])
   },
   methods: {
     handleAddPost() {
-      return
+      if (this.$refs.form.validate()) {
+        this.$store.dispatch('addPost', {
+          title: this.title,
+          imageUrl: this.imageUrl,
+          categories: this.categories,
+          description: this.description,
+          creatorId: this.user._id
+        })
+        this.$router.push('/')
+      }
     }
   }
 }
