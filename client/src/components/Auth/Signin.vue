@@ -5,14 +5,28 @@
         <h1>Welcome Back!</h1>
       </v-col>
     </v-row>
+
+    <!-- Error alert -->
+    <v-row v-if="error">
+      <v-col sm="6" offset-sm="3" class="mb-n8">
+        <form-alert :message="error.message"></form-alert>
+      </v-col>
+    </v-row>
+
     <v-row>
       <v-col sm="6" offset-sm="3">
         <v-card color="secondary" dark>
           <v-container>
-            <v-form @submit.prevent="handleSignin">
+            <v-form
+              v-model="isFormValid"
+              lazy-validation
+              ref="form"
+              @submit.prevent="handleSigninUser"
+            >
               <v-row>
                 <v-col>
                   <v-text-field
+                    :rules="usernameRules"
                     v-model="username"
                     prepend-icon="face"
                     placeholder="Username"
@@ -25,6 +39,7 @@
               <v-row>
                 <v-col>
                   <v-text-field
+                    :rules="passwordRules"
                     v-model="password"
                     prepend-icon="extension"
                     placeholder="Password"
@@ -36,7 +51,19 @@
 
               <v-row>
                 <v-col>
-                  <v-btn color="accent" type="submit">Signin</v-btn>
+                  <v-btn
+                    :loading="loading"
+                    :disabled="!isFormValid || loading"
+                    color="accent"
+                    type="submit"
+                  >
+                    <template v-slot:loader>
+                      <span class="custom-loader">
+                        <v-icon light>cached</v-icon>
+                      </span>
+                    </template>
+                    Signin</v-btn
+                  >
                   <h3>
                     Don't have an account?
                     <router-link to="/signup">Signup</router-link>
@@ -58,12 +85,23 @@ export default {
   name: 'Signin',
   data() {
     return {
+      isFormValid: true,
       username: '',
-      password: ''
+      password: '',
+      usernameRules: [
+        username => !!username || 'Username is required',
+        username =>
+          username.length < 10 || 'Username must be less than 10 characters'
+      ],
+      passwordRules: [
+        password => !!password || 'Password is required',
+        password =>
+          password.length >= 6 || 'Password must be at least 6 characters'
+      ]
     }
   },
   computed: {
-    ...mapGetters(['user'])
+    ...mapGetters(['user', 'error', 'loading'])
   },
   watch: {
     user(value) {
@@ -74,12 +112,53 @@ export default {
     }
   },
   methods: {
-    handleSignin() {
-      this.$store.dispatch('signinUser', {
-        username: this.username,
-        password: this.password
-      })
+    handleSigninUser() {
+      if (this.$refs.form.validate()) {
+        this.$store.dispatch('signinUser', {
+          username: this.username,
+          password: this.password
+        })
+      }
     }
   }
 }
 </script>
+
+<style>
+.custom-loader {
+  animation: loader 1s infinite;
+  display: flex;
+}
+@-moz-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+</style>
