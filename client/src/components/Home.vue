@@ -61,6 +61,6 @@ export default {
   right: 0;
 }
 .v-carousel__controls {
-  background:rgba(0, 0, 0, 0.5) !important;
+  background: rgba(0, 0, 0, 0.5) !important;
 }
 </style>
