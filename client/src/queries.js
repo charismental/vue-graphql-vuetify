@@ -29,7 +29,6 @@ export const GET_CURRENT_USER = gql`
   }
 `
 
-
 // Posts Mutations
 
 // User Mutations
