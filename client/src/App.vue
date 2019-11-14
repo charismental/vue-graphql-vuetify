@@ -77,8 +77,14 @@
         <!-- Profile Button -->
         <v-btn text to="/profile" v-if="user">
           <v-icon class="hidden-sm-and-down" left>account_box</v-icon>
-          <v-badge right color="blue darken-2">
-            <span slot="badge">1</span>
+          <v-badge
+            right
+            color="blue darken-2"
+            :class="{ bounce: badgeAnimated }"
+          >
+            <span v-if="userFavorites.length" slot="badge">{{
+              userFavorites.length
+            }}</span>
             Profile
           </v-badge>
         </v-btn>
@@ -134,7 +140,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'App',
   computed: {
-    ...mapGetters(['user', 'authError']),
+    ...mapGetters(['user', 'authError', 'userFavorites']),
     horizontalNavItems() {
       let items = [
         { icon: 'chat', title: 'Posts', link: '/posts' },
@@ -166,7 +172,8 @@ export default {
     return {
       sideNav: false,
       authSnackbar: false,
-      authErrorSnackbar: false
+      authErrorSnackbar: false,
+      badgeAnimated: false
     }
   },
   watch: {
@@ -176,6 +183,12 @@ export default {
     authError(val) {
       if (val !== null) {
         this.authErrorSnackbar = true
+      }
+    },
+    userFavorites(val) {
+      if (val) {
+        this.badgeAnimated = true
+        setTimeout(() => (this.badgeAnimated = false), 1000)
       }
     }
   },
@@ -204,5 +217,28 @@ export default {
 .fade-enter,
 .fade-leave-active {
   opacity: 0;
+}
+/* User Favorite Animation */
+.bounce {
+  animation: bounce 0.6s both;
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  53%,
+  80%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  40%, 43% {
+    transform: translate3d(0, -20px, 0);
+  }
+  70% {
+    transform: translate3d(0, -10px, 0);
+  }
+  90% {
+    transform: translate3d(0, -4px, 0);
+  }
 }
 </style>
