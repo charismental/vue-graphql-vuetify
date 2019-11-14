@@ -3,8 +3,13 @@
     <!-- Post Cards -->
     <v-row dense v-if="infiniteScrollPosts">
       <v-col sm="6" v-for="post in infiniteScrollPosts.posts" :key="post._id">
-        <v-card @click.native="goToPost(post._id)" hover>
-          <v-img :src="post.imageUrl" height="30vh" lazy-src></v-img>
+        <v-card hover>
+          <v-img
+            @click.native="goToPost(post._id)"
+            :src="post.imageUrl"
+            height="30vh"
+            lazy-src
+          ></v-img>
           <v-card-actions>
             <v-card-title primary>
               <div>
@@ -59,7 +64,6 @@
         </v-row>
       </v-col>
     </v-row>
-
   </v-container>
 </template>
 

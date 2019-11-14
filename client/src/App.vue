@@ -76,7 +76,7 @@
 
         <!-- Profile Button -->
         <v-btn text to="/profile" v-if="user">
-          <v-icon class="d-none d-md-flex" left>account_box</v-icon>
+          <v-icon class="hidden-sm-and-down" left>account_box</v-icon>
           <v-badge right color="blue darken-2">
             <span slot="badge">1</span>
             Profile
@@ -85,7 +85,7 @@
 
         <!-- Signout Button -->
         <v-btn text v-if="user" @click="handleSignoutUser">
-          <v-icon class="d-none d-md-flex" left>exit_to_app</v-icon>
+          <v-icon class="hidden-sm-and-down" left>exit_to_app</v-icon>
           Signout
         </v-btn>
       </v-toolbar-items>
