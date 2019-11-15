@@ -4,7 +4,7 @@
     <v-row>
       <v-dialog v-model="loading" persistent fullscreen>
         <v-container fill-height>
-          <v-row justify-center align-center>
+          <v-row align="center" justify="center">
             <v-progress-circular
               indeterminate
               :size="70"
