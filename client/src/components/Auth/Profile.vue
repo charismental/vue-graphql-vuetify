@@ -160,12 +160,15 @@
                   :rules="categoriesRules"
                   :items="[
                     'Art',
+                    'Coins',
                     'Education',
+                    'Entertainment',
                     'Food',
-                    'Travel',
                     'Furniture',
+                    'Nature',
                     'Photography',
-                    'Technology'
+                    'Technology',
+                    'Travel'
                   ]"
                   multiple
                   label="Categories"
