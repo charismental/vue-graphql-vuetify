@@ -121,6 +121,12 @@ export default new Vuex.Store({
                 pageNum: 1,
                 pageSize: 2
               }
+            },
+            {
+              query: GET_USER_POSTS,
+              variables: {
+                userId: postData.creatorId
+              }
             }
           ]
         })
