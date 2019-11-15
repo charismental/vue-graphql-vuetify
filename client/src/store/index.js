@@ -202,7 +202,9 @@ export default new Vuex.Store({
       // end session
       await apolloClient.resetStore()
       // redirect home - kick users out of private pages
-      router.push('/')
+      if (router.currentRoute.path !== '/') {
+        router.push('/')
+      }
     },
     signinUser: ({ commit }, formData) => {
       commit('CLEAR_ERROR')
