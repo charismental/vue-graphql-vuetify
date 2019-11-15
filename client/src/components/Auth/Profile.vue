@@ -47,7 +47,11 @@
       <v-row>
         <v-col sm="6" v-for="favorite in userFavorites" :key="favorite._id">
           <v-card class="mt-3 ml-1 mr-2" hover>
-            <v-img height="30vh" :src="favorite.imageUrl"></v-img>
+            <v-img
+              @click="goToPost(favorite._id)"
+              height="30vh"
+              :src="favorite.imageUrl"
+            ></v-img>
             <v-card-text class="title">{{ favorite.title }}</v-card-text>
           </v-card>
         </v-col>
@@ -95,7 +99,11 @@
               <v-icon>delete</v-icon>
             </v-btn>
 
-            <v-img height="30vh" :src="post.imageUrl"></v-img>
+            <v-img
+              @click="goToPost(post._id)"
+              height="30vh"
+              :src="post.imageUrl"
+            ></v-img>
             <v-card-text>{{ post.title }}</v-card-text>
           </v-card>
         </v-col>
@@ -237,6 +245,9 @@ export default {
     this.handleGetUserPosts()
   },
   methods: {
+    goToPost(postId) {
+      this.$router.push(`/posts/${postId}`)
+    },
     formatJoinDate(date) {
       return moment(new Date(date)).format('ll')
     },
