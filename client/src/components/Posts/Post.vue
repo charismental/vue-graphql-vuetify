@@ -64,6 +64,7 @@
             <v-row>
               <v-col>
                 <v-text-field
+                  ref="formField"
                   v-model="messageBody"
                   :rules="messageRules"
                   clearable
@@ -289,6 +290,7 @@ export default {
           .then(() => {
             // this.$refs.form.reset()
             this.messageBody = ''
+            this.$refs.formField.blur()
             this.$refs.form.resetValidation()
           })
           .catch(err => {
