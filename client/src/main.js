@@ -4,7 +4,6 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
-import '@babel/polyfill'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
@@ -19,7 +18,7 @@ Vue.use(VueApollo)
 
 // Setup ApolloClient
 export const defaultClient = new ApolloClient({
-  uri: 'http://localhost:4500/graphql',
+  uri: 'https://share-vue.herokuapp.com/graphql',
   // include auth token with requests made to backend
   fetchOptions: {
     credentials: 'include'
