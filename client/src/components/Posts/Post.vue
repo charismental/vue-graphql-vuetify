@@ -98,7 +98,7 @@
                   <v-list-item-subtitle>
                     {{ message.messageUser.username }}
                     <span class="grey--text text--lighten-1 hidden-xs-only">{{
-                      message.messageDate
+                      getTimeFromNow(message.messageDate)
                     }}</span>
                   </v-list-item-subtitle>
                 </v-list-item-content>
@@ -119,6 +119,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import {
   GET_POST,
   ADD_POST_MESSAGE,
@@ -252,6 +253,9 @@ export default {
     },
     goToPreviousPage() {
       this.$router.go(-1)
+    },
+    getTimeFromNow(time) {
+      return moment(new Date(time)).fromNow()
     },
     toggleImageDialog() {
       if (window.innerWidth >= 500) {
