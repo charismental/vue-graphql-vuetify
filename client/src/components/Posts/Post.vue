@@ -286,12 +286,10 @@ export default {
               })
             }
           })
-          .then(({ data }) => {
+          .then(() => {
             // this.$refs.form.reset()
             this.messageBody = ''
             this.$refs.form.resetValidation()
-            // eslint-disable-next-line no-console
-            console.log(data.addPostMessage)
           })
           .catch(err => {
             // eslint-disable-next-line no-console
