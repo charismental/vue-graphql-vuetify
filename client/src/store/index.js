@@ -124,9 +124,9 @@ export default new Vuex.Store({
             }
           ]
         })
-        .then(({ data }) => {
-          console.log(data.addPost)
-        })
+        // .then(({ data }) => {
+        //   console.log(data.addPost)
+        // })
         .catch(err => {
           console.error(err)
         })
@@ -182,7 +182,6 @@ export default new Vuex.Store({
           commit('SET_LOADING', false)
           // add user data to state
           commit('SET_USER', data.getCurrentUser)
-          console.log(data.getCurrentUser)
         })
         .catch(err => {
           commit('SET_LOADING', false)
