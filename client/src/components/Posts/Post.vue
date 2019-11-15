@@ -34,7 +34,7 @@
 
           <!-- Post Image Dialog-->
           <v-dialog v-model="dialog">
-            <v-card>
+            <v-card @click="dialog = false">
               <v-img :src="getPost.imageUrl" height="80vh"></v-img>
             </v-card>
           </v-dialog>
