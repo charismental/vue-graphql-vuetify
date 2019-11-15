@@ -1,5 +1,6 @@
 <template>
   <v-container text-center>
+    <!-- Loading Spinner -->
     <v-row>
       <v-dialog v-model="loading" persistent fullscreen>
         <v-container fill-height>
@@ -14,6 +15,17 @@
         </v-container>
       </v-dialog>
     </v-row>
+
+    <!-- Explore Posts Button -->
+    <v-row v-if="!loading">
+      <v-col>
+        <v-btn class="secondary" to="/posts" large dark>
+          Explore Posts
+        </v-btn>
+      </v-col>
+    </v-row>
+
+    <!-- Posts carousel -->
     <v-col>
       <v-carousel
         v-if="!loading && posts.length"
@@ -58,6 +70,7 @@ export default {
 <style>
 #carousel__title {
   position: absolute;
+  cursor: pointer;
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   border-radius: 5px 5px 0 0;
