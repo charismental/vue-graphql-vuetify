@@ -20,6 +20,7 @@
     <v-row v-if="!loading">
       <v-col>
         <v-btn class="secondary" to="/posts" large dark>
+          <v-icon left>chat</v-icon>
           Explore Posts
         </v-btn>
       </v-col>
@@ -30,13 +31,15 @@
       <v-carousel
         v-if="!loading && posts.length"
         v-bind="{ cycle: true }"
-        interval="3000"
+        interval="3500"
       >
         <v-carousel-item
           v-for="post in posts"
           :key="post._id"
           :src="post.imageUrl"
           @click.native="goToPost(post._id)"
+          reverse-transition="fade-transition"
+          transition="fade-transition"
         >
           <h1 id="carousel__title">{{ post.title }}</h1>
         </v-carousel-item>
