@@ -28,6 +28,15 @@ export const GET_POSTS = gql`
     }
   }
 `
+export const GET_CATEGORIES = gql`
+  query {
+    getCategories {
+      _id
+      name
+    }
+  }
+`
+
 export const GET_POST = gql`
   query($postId: ID!) {
     getPost(postId: $postId) {
@@ -123,6 +132,14 @@ export const ADD_POST = gql`
       imageUrl
       categories
       description
+    }
+  }
+`
+export const ADD_CATEGORY = gql`
+  mutation($name: String!) {
+    addCategory(name: $name) {
+      _id
+      name
     }
   }
 `

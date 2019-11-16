@@ -41,31 +41,44 @@
           <!-- image preview -->
           <v-row>
             <v-col class="flex-nowrap">
-              <img :src="imageUrl" height="300px" />
+              <img :src="imageUrl" class="preview-image" />
             </v-col>
           </v-row>
 
           <!-- Categories Select -->
-          <v-row>
+          <!-- <v-row>
             <v-col class="flex-nowrap">
               <v-select
                 v-model="categories"
                 :rules="categoriesRules"
-                :items="[
-                  'Art',
-                  'Coins',
-                  'Education',
-                  'Entertainment',
-                  'Food',
-                  'Furniture',
-                  'Nature',
-                  'Photography',
-                  'Technology',
-                  'Travel'
-                ]"
+                :items="allCategories"
                 multiple
                 label="Categories"
               ></v-select>
+            </v-col>
+          </v-row> -->
+          <v-row>
+            <v-col cols="12" sm="8">
+              <v-select
+                v-model="categories"
+                :rules="categoriesRules"
+                :items="
+                  allCategories.length ? allCategories : defaultCategories
+                "
+                chips
+                multiple
+                dense
+                label="Categories"
+              ></v-select>
+            </v-col>
+            <v-col cols="12" sm="4" class="mt-n1">
+              <v-text-field
+                :append-outer-icon="addCategory && 'send'"
+                @click:append-outer="handleAddCategory"
+                :rules="newCatRules"
+                label="Add Category"
+                v-model="addCategory"
+              ></v-text-field>
             </v-col>
           </v-row>
 
@@ -113,10 +126,15 @@ export default {
   data() {
     return {
       isFormValid: true,
+      addCategory: '',
       title: '',
       imageUrl: '',
       categories: [],
       description: '',
+      newCatRules: [
+        newCat =>
+          newCat.length < 12 || 'Category must have less than 12 characters'
+      ],
       titleRules: [
         title => !!title || 'Title is required',
         title => title.length < 20 || 'Title must have less than 20 characters'
@@ -134,10 +152,20 @@ export default {
       ]
     }
   },
+  created() {
+    this.handleGetCategories()
+  },
   computed: {
-    ...mapGetters(['loading', 'user'])
+    ...mapGetters(['loading', 'user', 'allCategories', 'defaultCategories'])
   },
   methods: {
+    handleGetCategories() {
+      this.$store.dispatch('getCategories')
+    },
+    handleAddCategory() {
+      this.$store.dispatch('addCategory', this.addCategory)
+      this.addCategory = ''
+    },
     handleAddPost() {
       if (this.$refs.form.validate()) {
         this.$store.dispatch('addPost', {
@@ -153,3 +181,10 @@ export default {
   }
 }
 </script>
+<style>
+.preview-image {
+  height: auto !important;
+  max-height: 30vh !important;
+  max-width: 100% !important;
+}
+</style>

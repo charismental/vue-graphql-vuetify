@@ -147,32 +147,34 @@
 
             <!-- image preview -->
             <v-row>
-              <v-col class="flex-nowrap">
-                <img :src="imageUrl" height="300px" />
+              <v-col class="d-flex justify-center">
+                <img class="preview-image" :src="imageUrl" height="30vh" />
               </v-col>
             </v-row>
 
             <!-- Categories Select -->
             <v-row>
-              <v-col class="flex-nowrap">
+              <v-col cols="12" sm="8">
                 <v-select
                   v-model="categories"
                   :rules="categoriesRules"
-                  :items="[
-                    'Art',
-                    'Coins',
-                    'Education',
-                    'Entertainment',
-                    'Food',
-                    'Furniture',
-                    'Nature',
-                    'Photography',
-                    'Technology',
-                    'Travel'
-                  ]"
+                  :items="
+                    allCategories.length ? allCategories : defaultCategories
+                  "
+                  chips
                   multiple
+                  dense
                   label="Categories"
                 ></v-select>
+              </v-col>
+              <v-col cols="12" sm="4" class="mt-n1">
+                <v-text-field
+                  :append-outer-icon="addCategory && 'send'"
+                  @click:append-outer="handleAddCategory"
+                  :rules="newCatRules"
+                  label="Add Category"
+                  v-model="addCategory"
+                ></v-text-field>
               </v-col>
             </v-row>
 
@@ -218,12 +220,17 @@ export default {
   name: 'Profile',
   data() {
     return {
+      addCategory: '',
       editPostDialog: false,
       isFormValid: true,
       title: '',
       imageUrl: '',
       categories: [],
       description: '',
+      newCatRules: [
+        newCat =>
+          newCat.length < 12 || 'Category must have less than 12 characters'
+      ],
       titleRules: [
         title => !!title || 'Title is required',
         title => title.length < 20 || 'Title must have less than 20 characters'
@@ -242,12 +249,26 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['user', 'userFavorites', 'userPosts'])
+    ...mapGetters([
+      'user',
+      'userFavorites',
+      'userPosts',
+      'allCategories',
+      'defaultCategories'
+    ])
   },
   created() {
     this.handleGetUserPosts()
+    this.handleGetCategories()
   },
   methods: {
+    handleGetCategories() {
+      this.$store.dispatch('getCategories')
+    },
+    handleAddCategory() {
+      this.$store.dispatch('addCategory', this.addCategory)
+      this.addCategory = ''
+    },
     goToPost(postId) {
       this.$router.push(`/posts/${postId}`)
     },
@@ -297,3 +318,11 @@ export default {
   }
 }
 </script>
+
+<style>
+.preview-image {
+  height: auto !important;
+  max-height: 30vh !important;
+  max-width: 100% !important;
+}
+</style>

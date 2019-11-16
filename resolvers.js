@@ -18,6 +18,11 @@ module.exports = {
       })
       return user
     },
+    getCategories: async (_, args, { Category }) => {
+      const categories = await Category.find({})
+        .sort({ name: "asc"})
+      return categories
+    },
     getPosts: async (_, args, { Post }) => {
       const posts = await Post.find({})
         .sort({ createdDate: "desc" })
@@ -77,6 +82,10 @@ module.exports = {
     }
   },
   Mutation: {
+    addCategory: async (_, { name }, { Category }) => {
+      const newCategory = await new Category({ name }).save()
+      return newCategory
+    },
     addPost: async (
       _,
       { title, imageUrl, categories, description, creatorId },

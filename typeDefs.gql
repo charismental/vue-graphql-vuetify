@@ -20,6 +20,11 @@ type Post {
   messages: [Message]
 }
 
+type Category {
+  _id: ID
+  name: String!
+}
+
 type Message {
   _id: ID
   messageBody: String!
@@ -50,6 +55,7 @@ type Mutation {
     description: String!
     creatorId: ID!
   ): Post!
+  addCategory(name: String!): Category!
   updateUserPost(postId: ID!, userId: ID!, title: String!, imageUrl: String!, categories: [String]!, description: String!): Post!
   deleteUserPost(postId: ID!): Post!
   deleteUserMessage(postId: ID!, messageId: ID!): Post!
@@ -62,6 +68,7 @@ type Mutation {
 
 type Query {
   getPosts: [Post]
+  getCategories: [Category]
   getCurrentUser: User
   getPost(postId: ID!): Post!
   getUserPosts(userId: ID!): [Post]

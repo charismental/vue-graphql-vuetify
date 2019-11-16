@@ -13,6 +13,7 @@ const resolvers = require("./resolvers");
 require("dotenv").config({ path: "variables.env" });
 const User = require("./models/User");
 const Post = require("./models/Post");
+const Category = require("./models/Category");
 
 // Connect to mongo cloud db
 mongoose
@@ -48,7 +49,7 @@ const server = new ApolloServer({
   }),
   context: async ({ req }) => {
     const token = req.headers['authorization']
-    return { User, Post, currentUser: await getUser(token) }
+    return { User, Post, Category, currentUser: await getUser(token) }
   }
 });
 

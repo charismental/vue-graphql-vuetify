@@ -16,7 +16,9 @@ import {
   UPDATE_USER_POST,
   DELETE_USER_POST,
   INFINITE_SCROLL_POSTS,
-  DELETE_USER_MESSAGE
+  DELETE_USER_MESSAGE,
+  GET_CATEGORIES,
+  ADD_CATEGORY
 } from '../queries'
 
 Vue.use(Vuex)
@@ -29,9 +31,28 @@ export default new Vuex.Store({
     error: null,
     authError: null,
     searchResults: [],
-    userPosts: []
+    userPosts: [],
+    allCategories: [],
+    defaultCategories: [
+      'Art',
+      'Coins',
+      'Education',
+      'Entertainment',
+      'Food',
+      'Furniture',
+      'Nature',
+      'Photography',
+      'Technology',
+      'Travel'
+    ]
   },
   mutations: {
+    ADD_CATEGORY: (state, category) => {
+      state.allCategories.push(category)
+    },
+    SET_CATEGORIES: (state, categories) => {
+      state.allCategories = categories
+    },
     SET_POSTS: (state, posts) => {
       state.posts = posts
     },
@@ -89,6 +110,36 @@ export default new Vuex.Store({
         .catch(err => {
           console.error(err)
         })
+    },
+    addCategory: (context, name) => {
+      apolloClient.mutate({
+        mutation: ADD_CATEGORY,
+        variables: { name: name },
+        update: (cache, { data: { addCategory } }) => {
+          const data = cache.readQuery({ query: GET_CATEGORIES })
+          data.getCategories.unshift(addCategory)
+          cache.writeQuery({
+            query: GET_CATEGORIES,
+            data
+          })
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          addCategory: {
+            __typename: 'Category',
+            _id: -1,
+            name
+          }
+        },
+        refetchQueries: [
+          {
+            query: GET_CATEGORIES,
+            variables: {
+              name
+            }
+          }
+        ]
+      })
     },
     addPost: (context, postData) => {
       apolloClient
@@ -263,6 +314,18 @@ export default new Vuex.Store({
           commit('SET_ERROR', err)
         })
     },
+    getCategories: ({ commit }) => {
+      apolloClient
+        .query({
+          query: GET_CATEGORIES
+        })
+        .then(({ data }) => {
+          commit('SET_CATEGORIES', data.getCategories)
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    },
     getPosts: ({ commit }) => {
       commit('SET_LOADING', true)
       apolloClient
@@ -287,7 +350,9 @@ export default new Vuex.Store({
     user: state => state.user,
     userFavorites: state => state.user && state.user.favorites,
     error: state => state.error,
-    authError: state => state.authError
+    authError: state => state.authError,
+    allCategories: state => state.allCategories.map(cat => cat.name),
+    defaultCategories: state => state.defaultCategories
   },
   modules: {}
 })
