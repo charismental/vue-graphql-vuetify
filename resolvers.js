@@ -1,9 +1,9 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 
-const createToken = (user, secret, expiresIn) => {
+const createToken = (user, secret) => {
   const { username, email } = user
-  return jwt.sign({ username, email }, secret, { expiresIn });
+  return jwt.sign({ username, email }, secret);
 }
 
 module.exports = {
@@ -188,7 +188,7 @@ module.exports = {
       if (!isValidPassword) {
         throw new Error("Invalid password")
       }
-      return { token: createToken(user, process.env.SECRET, '1hr') };
+      return { token: createToken(user, process.env.SECRET) };
     },
     signupUser: async (_, { username, email, password }, { User }) => {
       const user = await User.findOne({ username });
@@ -200,7 +200,7 @@ module.exports = {
         email,
         password
       }).save();
-      return { token: createToken(newUser, process.env.SECRET, '1hr') };
+      return { token: createToken(newUser, process.env.SECRET) };
     }
   }
 };
