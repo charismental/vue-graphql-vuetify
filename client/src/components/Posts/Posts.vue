@@ -11,6 +11,11 @@
             lazy-src
           ></v-img>
           <v-card-actions>
+            <v-btn @click="showPostCreator = !showPostCreator" icon>
+              <v-icon>{{
+                `keyboard_arrow_${showPostCreator ? 'up' : 'down'}`
+              }}</v-icon>
+            </v-btn>
             <v-card-title primary>
               <div>
                 <div class="headline">{{ post.title }}</div>
@@ -20,12 +25,6 @@
                 >
               </div>
             </v-card-title>
-            <v-spacer></v-spacer>
-            <v-btn @click="showPostCreator = !showPostCreator" icon>
-              <v-icon>{{
-                `keyboard_arrow_${showPostCreator ? 'up' : 'down'}`
-              }}</v-icon>
-            </v-btn>
           </v-card-actions>
 
           <!-- Post Creator tile -->
@@ -48,9 +47,20 @@
                 </v-list-item-content>
 
                 <v-list-item-action>
-                  <v-btn icon ripple>
+                  <!-- <v-btn icon ripple>
                     <v-icon color="grey lighten-1">info</v-icon>
-                  </v-btn>
+                  </v-btn> -->
+                  <v-tooltip top open-on-click>
+                    <template v-slot:activator="{ on }">
+                      <v-btn icon v-on="on" ripple>
+                        <v-icon color="grey lighten-1">info</v-icon>
+                      </v-btn>
+                    </template>
+                    <span
+                      >Frank, Frank, Frank, Frank, Frank, Frank, Frank, Frank,
+                      Frank, Frank, Frank, Frank, Frank, Frank</span
+                    >
+                  </v-tooltip>
                 </v-list-item-action>
               </v-list-item>
             </v-card-text>
