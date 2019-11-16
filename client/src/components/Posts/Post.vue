@@ -5,7 +5,15 @@
       <v-col>
         <v-card hover>
           <v-card-title>
-            <h1>{{ getPost.title }}</h1>
+            <h1
+              :class="{
+                // eslint-disable-next-line prettier/prettier
+                'title': $vuetify.breakpoint.smAndDown,
+                'display-1': $vuetify.breakpoint.mdAndUp
+              }"
+            >
+              {{ getPost.title }}
+            </h1>
             <v-btn @click="handleToggleLike" large icon v-if="user">
               <v-icon
                 large
@@ -41,11 +49,11 @@
 
           <v-card-text>
             <span v-for="(category, i) in getPost.categories" :key="i">
-              <v-chip class="mb-3 mr-3" color="accent" text-color="white">{{
-                category
-              }}</v-chip>
+              <v-chip link class="mb-3 mr-3" color="accent" text-color="white">
+                {{ category }}
+              </v-chip>
             </span>
-            <h3>{{ getPost.description }}</h3>
+            <h3 style="cursor: default">{{ getPost.description }}</h3>
           </v-card-text>
         </v-card>
       </v-col>
@@ -71,7 +79,7 @@
                   :append-outer-icon="messageBody && 'send'"
                   @click:append-outer="handleAddPostMessage"
                   prepend-icon="email"
-                  label="Add Message"
+                  :label="addMessagePlaceholder"
                   type="text"
                   required
                 ></v-text-field>
@@ -147,9 +155,8 @@ export default {
       messageBody: '',
       isFormValid: true,
       messageRules: [
-        message => !!message || 'Message is required',
         message =>
-          message.length < 50 || 'Message must be less than 50 characters'
+          message.length <= 50 || 'Message must be no more than 50 characters'
       ]
     }
   },
@@ -164,7 +171,15 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['user', 'userFavorites'])
+    ...mapGetters(['user', 'userFavorites']),
+    addMessagePlaceholder() {
+      const addMessage = 'Add Message'
+      if (this.messageBody.length) {
+        return `${addMessage} - (${this.messageBody.length} / 50)`
+      } else {
+        return addMessage
+      }
+    }
   },
   methods: {
     checkIfPostLiked(postId) {
@@ -278,7 +293,7 @@ export default {
       })
     },
     handleAddPostMessage() {
-      if (this.$refs.form.validate()) {
+      if (this.messageBody.length && this.$refs.form.validate()) {
         const variables = {
           messageBody: this.messageBody,
           userId: this.user._id,
@@ -319,5 +334,9 @@ export default {
 <style scoped>
 #post__image {
   height: 400px !important;
+}
+.v-card__text,
+.v-card__title {
+  word-break: normal !important;
 }
 </style>
