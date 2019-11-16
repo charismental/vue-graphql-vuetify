@@ -115,97 +115,23 @@
       <v-card>
         <v-card-title class="headline grey lighten-2">Update Post</v-card-title>
         <v-container>
-          <v-form
-            v-model="isFormValid"
-            lazy-validation
-            ref="form"
-            @submit.prevent="handleUpdateUserPost"
-          >
-            <v-row>
-              <v-col>
-                <v-text-field
-                  :rules="titleRules"
-                  v-model="title"
-                  placeholder="Post Title"
-                  type="text"
-                  required
-                ></v-text-field>
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col>
-                <v-text-field
-                  :rules="imageRules"
-                  v-model="imageUrl"
-                  placeholder="Image URL"
-                  type="text"
-                  required
-                ></v-text-field>
-              </v-col>
-            </v-row>
-
-            <!-- image preview -->
-            <v-row>
-              <v-col class="d-flex justify-center">
-                <img class="preview-image" :src="imageUrl" height="30vh" />
-              </v-col>
-            </v-row>
-
-            <!-- Categories Select -->
-            <v-row>
-              <v-col cols="12" sm="8">
-                <v-select
-                  v-model="categories"
-                  :rules="categoriesRules"
-                  :items="
-                    allCategories.length ? allCategories : defaultCategories
-                  "
-                  chips
-                  multiple
-                  dense
-                  label="Categories"
-                ></v-select>
-              </v-col>
-              <v-col cols="12" sm="4" class="mt-n1">
-                <v-text-field
-                  :append-outer-icon="addCategory && 'send'"
-                  @click:append-outer="handleAddCategory"
-                  :rules="newCatRules"
-                  label="Add Category"
-                  v-model="addCategory"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-
-            <!-- Description text area -->
-
-            <v-row>
-              <v-col class="flex-nowrap">
-                <v-textarea
-                  :rules="descRules"
-                  v-model="description"
-                  label="Description"
-                  type="text"
-                ></v-textarea>
-              </v-col>
-            </v-row>
-
+          <post-form v-slot="{ formData }" :loadedPost="loadedPost">
             <v-divider></v-divider>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn
-                :disabled="!isFormValid"
+                :disabled="!formData.isFormValid"
                 class="success--text"
                 type="submit"
                 text
+                @click.prevent="handleUpdateUserPost(formData)"
                 >Update</v-btn
               >
               <v-btn class="error--text" text @click="editPostDialog = false"
                 >Cancel</v-btn
               >
             </v-card-actions>
-          </v-form>
+          </post-form>
         </v-container>
       </v-card>
     </v-dialog>
@@ -215,60 +141,26 @@
 <script>
 import moment from 'moment'
 import { mapGetters } from 'vuex'
+import PostForm from '../Shared/PostForm'
 
 export default {
   name: 'Profile',
+  components: {
+    PostForm
+  },
   data() {
     return {
-      addCategory: '',
       editPostDialog: false,
-      isFormValid: true,
-      title: '',
-      imageUrl: '',
-      categories: [],
-      description: '',
-      newCatRules: [
-        newCat =>
-          newCat.length < 12 || 'Category must have less than 12 characters'
-      ],
-      titleRules: [
-        title => !!title || 'Title is required',
-        title => title.length < 20 || 'Title must have less than 20 characters'
-      ],
-      imageRules: [image => !!image || 'Image URL is required'],
-      categoriesRules: [
-        categories =>
-          categories.length >= 1 || 'Please select at least one category'
-      ],
-      descRules: [
-        description => !!description || 'Description is required',
-        description =>
-          description.length < 200 ||
-          'Description must be less than 200 characters'
-      ]
+      loadedPost: {}
     }
   },
   computed: {
-    ...mapGetters([
-      'user',
-      'userFavorites',
-      'userPosts',
-      'allCategories',
-      'defaultCategories'
-    ])
+    ...mapGetters(['user', 'userFavorites', 'userPosts'])
   },
   created() {
     this.handleGetUserPosts()
-    this.handleGetCategories()
   },
   methods: {
-    handleGetCategories() {
-      this.$store.dispatch('getCategories')
-    },
-    handleAddCategory() {
-      this.$store.dispatch('addCategory', this.addCategory)
-      this.addCategory = ''
-    },
     goToPost(postId) {
       this.$router.push(`/posts/${postId}`)
     },
@@ -280,15 +172,15 @@ export default {
         userId: this.user._id
       })
     },
-    handleUpdateUserPost() {
-      if (this.$refs.form.validate()) {
+    handleUpdateUserPost(formData) {
+      if (formData.isFormValid) {
         this.$store.dispatch('updateUserPost', {
-          postId: this.postId,
+          postId: this.loadedPost.postId,
           userId: this.user._id,
-          title: this.title,
-          imageUrl: this.imageUrl,
-          categories: this.categories,
-          description: this.description
+          title: formData.title,
+          imageUrl: formData.imageUrl,
+          categories: formData.categories,
+          description: formData.description
         })
         this.editPostDialog = false
       }
@@ -309,20 +201,14 @@ export default {
       editPostDialog = true
     ) {
       this.editPostDialog = editPostDialog
-      this.postId = _id
-      this.title = title
-      this.imageUrl = imageUrl
-      this.categories = categories
-      this.description = description
+      this.loadedPost = {
+        postId: _id,
+        title: title,
+        imageUrl: imageUrl,
+        categories: categories,
+        description: description
+      }
     }
   }
 }
 </script>
-
-<style>
-.preview-image {
-  height: auto !important;
-  max-height: 30vh !important;
-  max-width: 100% !important;
-}
-</style>
