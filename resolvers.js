@@ -104,6 +104,16 @@ module.exports = {
       const post = await Post.findOneAndRemove({ _id: postId })
       return post
     },
+    deleteUserMessage: async (_, { postId, messageId }, { Post }) => {
+      // const post = await Post.find({ _id: postId})
+      // const message = await post.messages.find({ _id: messageId })
+      const updatedPost = await Post.findOneAndUpdate(
+        { _id: postId },
+        { $pull: { messages: { _id: messageId } } },
+        { new: true }
+        )
+      return updatedPost
+    },
     addPostMessage: async (_, { messageBody, userId, postId }, { Post }) => {
       const newMessage = {
         messageBody,
@@ -112,7 +122,7 @@ module.exports = {
       const post = await Post.findOneAndUpdate(
         // Find post by id
         { _id: postId },
-        // prepend (push) new messagae to beginning of messages array
+        // prepend (push) new message to beginning of messages array
         { $push: { messages: { $each: [newMessage], $position: 0 } } },
         // return fresh document after update
         { new: true }
