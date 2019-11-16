@@ -106,6 +106,14 @@
 
                 <v-list-item-action class="hidden-xs-only">
                   <v-icon
+                    v-if="checkIfOwnMessage(message)"
+                    @click="handleDeleteUserMessage(message._id)"
+                    >delete</v-icon
+                  >
+                </v-list-item-action>
+
+                <v-list-item-action class="hidden-xs-only">
+                  <v-icon
                     :color="checkIfOwnMessage(message) ? 'accent' : 'grey'"
                     >chat_bubble</v-icon
                   >
@@ -263,6 +271,12 @@ export default {
         this.dialog = !this.dialog
       }
     },
+    handleDeleteUserMessage(messageId) {
+      this.$store.dispatch('deleteUserMessage', {
+        postId: this.postId,
+        messageId
+      })
+    },
     handleAddPostMessage() {
       if (this.$refs.form.validate()) {
         const variables = {
@@ -288,7 +302,6 @@ export default {
             }
           })
           .then(() => {
-            // this.$refs.form.reset()
             this.messageBody = ''
             this.$refs.formField.blur()
             this.$refs.form.resetValidation()

@@ -6,6 +6,7 @@ import router from '../router'
 import { defaultClient as apolloClient } from '../main'
 import {
   GET_POSTS,
+  GET_POST,
   SIGNIN_USER,
   SIGNUP_USER,
   GET_CURRENT_USER,
@@ -14,7 +15,8 @@ import {
   GET_USER_POSTS,
   UPDATE_USER_POST,
   DELETE_USER_POST,
-  INFINITE_SCROLL_POSTS
+  INFINITE_SCROLL_POSTS,
+  DELETE_USER_MESSAGE
 } from '../queries'
 
 Vue.use(Vuex)
@@ -153,6 +155,22 @@ export default new Vuex.Store({
             ...state.userPosts.slice(index + 1)
           ]
           commit('SET_USER_POSTS', userPosts)
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    },
+    deleteUserMessage: (context, postAndMessageIds) => {
+      apolloClient
+        .mutate({
+          mutation: DELETE_USER_MESSAGE,
+          variables: postAndMessageIds,
+          refetchQueries: [
+            {
+              query: GET_POST,
+              variables: { postId: postAndMessageIds.postId }
+            }
+          ]
         })
         .catch(err => {
           console.error(err)
