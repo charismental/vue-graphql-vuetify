@@ -62,11 +62,15 @@
                         <v-icon light>cached</v-icon>
                       </span>
                     </template>
-                    Signin</v-btn
+                    Sign in</v-btn
                   >
                   <h3>
                     Don't have an account?
-                    <router-link to="/signup">Signup</router-link>
+                    <router-link
+                      to="/signup"
+                      class="accent--text text--darken-1"
+                      >{{ ` Signup` }}</router-link
+                    >
                   </h3>
                 </v-col>
               </v-row>

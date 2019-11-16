@@ -88,11 +88,15 @@
                         <v-icon light>cached</v-icon>
                       </span>
                     </template>
-                    Signup</v-btn
+                    Sign up</v-btn
                   >
                   <h3>
                     Already have an account?
-                    <router-link to="/signin">Signin</router-link>
+                    <router-link
+                      to="/signin"
+                      class="info--text text--darken-1"
+                      >{{ ` Sign in` }}</router-link
+                    >
                   </h3>
                 </v-col>
               </v-row>
