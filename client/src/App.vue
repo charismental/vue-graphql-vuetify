@@ -42,7 +42,7 @@
     <!-- Horizontal Navbar -->
     <v-app-bar color="primary" dark app>
       <v-app-bar-nav-icon @click="toggleSideNav"></v-app-bar-nav-icon>
-      <v-toolbar-title class="hidden-xs-only">
+      <v-toolbar-title class="hidden-sm-and-down">
         <router-link to="/" tag="span" style="cursor: pointer">
           VueShare
         </router-link>
@@ -154,6 +154,30 @@
         </v-snackbar>
       </v-content>
     </main>
+    <!-- bottom nav -->
+    <v-bottom-navigation
+      app
+      :value="activeBtn"
+      fixed
+      grow
+      background-color="primary"
+      dark
+    >
+      <v-btn>
+        <span>Recents</span>
+        <v-icon>history</v-icon>
+      </v-btn>
+
+      <v-btn>
+        <span>Favorites</span>
+        <v-icon>favorite</v-icon>
+      </v-btn>
+
+      <v-btn>
+        <span>Nearby</span>
+        <v-icon>near_me</v-icon>
+      </v-btn>
+    </v-bottom-navigation>
   </v-app>
 </template>
 
@@ -171,7 +195,10 @@ export default {
         { icon: 'create', title: 'Sign Up', link: '/signup' }
       ]
       if (this.user) {
-        items = [{ icon: 'chat', title: 'Posts', link: '/posts' }]
+        items = [
+          // { icon: 'chat', title: 'Posts', link: '/posts' },
+          { icon: 'create', title: 'Create Post', link: '/post/add' }
+        ]
       }
       return items
     },
@@ -193,6 +220,7 @@ export default {
   },
   data() {
     return {
+      activeBtn: 1,
       searchTerm: '',
       sideNav: false,
       authSnackbar: false,
@@ -247,6 +275,9 @@ export default {
 </script>
 
 <style>
+#app {
+  background: #c5cae9 !important;
+}
 h1 {
   font-weight: 400;
   font-size: 2.5rem;
